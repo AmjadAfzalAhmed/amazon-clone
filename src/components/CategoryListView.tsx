@@ -1,22 +1,22 @@
 import React, { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { Button } from "./ui/button";
-import { Check, ChevronDown } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
+  CommandItem,
   CommandList,
 } from "./ui/command";
-import { CategoryItems } from "@/type";
-import { CommandItem } from "cmdk";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 
-const CategoryListView = ({categories}:CategoryItems) => {
+interface CategoryListViewProps {
+  categories: string[];
+}
+
+const CategoryListView: React.FC<CategoryListViewProps> = ({ categories }) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState('')
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -35,15 +35,11 @@ const CategoryListView = ({categories}:CategoryItems) => {
         <Command className="bg-amazonBlue backdrop-blur-md text-white">
           <CommandInput placeholder="Search Category" className="h-9" />
           <CommandList>
-            <CommandEmpty>No Category found.</CommandEmpty>
+            <CommandEmpty>No category found.</CommandEmpty>
             <CommandGroup className="text-white">
-              {categories?.map((category:string,index) => (
-                <CommandItem value={category} key={index} onSelect={(currentValue) => {
-                  setValue(currentValue === value ? '':currentValue);
-                  setOpen(false);
-                }}>
-                  <Link href={`/category/${category}`} className="flex justify-between items-center w-full px-2 py-1 capitalize font-medium hover:text-amazonBlue hover:bg-white">
-                  {category}<Check className={cn(`ml-auto w-4 h-4`,value === category?"opacity-100":"opacity-0")}/></Link>
+              {categories.map((category, index) => (
+                <CommandItem key={index} value={category}>
+                  {category}
                 </CommandItem>
               ))}
             </CommandGroup>
